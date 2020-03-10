@@ -13,6 +13,7 @@
 		40D675772415E41E00819489 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40D675752415E41E00819489 /* Main.storyboard */; };
 		40D675792415E41F00819489 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40D675782415E41F00819489 /* Assets.xcassets */; };
 		40D6757C2415E41F00819489 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40D6757A2415E41F00819489 /* LaunchScreen.storyboard */; };
+		40D6758B2417F9BC00819489 /* bell.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 40D6758A2417F9BC00819489 /* bell.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		40D675782415E41F00819489 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		40D6757B2415E41F00819489 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		40D6757D2415E41F00819489 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		40D6758A2417F9BC00819489 /* bell.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bell.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,8 +65,17 @@
 				40D675782415E41F00819489 /* Assets.xcassets */,
 				40D6757A2415E41F00819489 /* LaunchScreen.storyboard */,
 				40D6757D2415E41F00819489 /* Info.plist */,
+				40D675892417F9A300819489 /* sound */,
 			);
 			path = "PIzza Timer";
+			sourceTree = "<group>";
+		};
+		40D675892417F9A300819489 /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				40D6758A2417F9BC00819489 /* bell.mp3 */,
+			);
+			path = sound;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,6 +137,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40D6757C2415E41F00819489 /* LaunchScreen.storyboard in Resources */,
+				40D6758B2417F9BC00819489 /* bell.mp3 in Resources */,
 				40D675792415E41F00819489 /* Assets.xcassets in Resources */,
 				40D675772415E41E00819489 /* Main.storyboard in Resources */,
 			);

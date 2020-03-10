@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
 
+    var audioPlayer: AVAudioPlayer?
+    
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
     
@@ -51,29 +54,9 @@ class ViewController: UIViewController {
         // update Label
         updateInfoLabel(pizzaType: buttonTitle)
         
-        
-        
-        
+        //timer
         myTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(startTimer), userInfo: nil, repeats: true)
 
-        
-        
-//        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-//            //progress bar
-//
-//            if self.progress >= 1.0 {
-//                timer.invalidate()
-//                print("invalidate triggered")
-//
-//
-//            }
-//
-//            print("\(self.progress) - progress")
-//            self.progress += self.progressIncrement
-//
-//        }
-        
-        
     }
     
     // timer function
@@ -90,8 +73,22 @@ class ViewController: UIViewController {
         
         if progress >= 1.0 {
             timer.invalidate()
+            // play timer sound
+            playBellSound()
         }
         
+        
+    }
+    
+    func playBellSound() {
+        let soundURL = Bundle.main.url(forResource: "bell", withExtension: "mp3")
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: soundURL!)
+        }
+        catch {
+            print("failed to load file")
+        }
+        audioPlayer!.play()
     }
     
     func updateTimerLabel() {
@@ -104,6 +101,9 @@ class ViewController: UIViewController {
     }
     
     func initializeView() {
+        
+        // setting up info label
+        infoLabel.text = "Pizza Timer"
         
         // hide timer pizza graphic
         tPizzaTimerGraphic.isHidden = true
