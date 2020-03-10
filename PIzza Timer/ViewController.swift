@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var infoLabel: UILabel!
-    @IBOutlet weak var finalImage: UIImageView!
+    @IBOutlet weak var timerLabel: UILabel!
     
     @IBOutlet weak var progressBar: UIProgressView!
     
@@ -20,113 +20,144 @@ class ViewController: UIViewController {
     @IBOutlet weak var bPizzaTimerGraphic: UIImageView!
     @IBOutlet weak var lPizzaTimerGraphic: UIImageView!
     
+    var pizzaDetails = [
+        "Thin Crust": 5,
+        "Cheese Filled Crust": 10,
+        "Pan": 15
+    ]
+        
     var progress:Float = 0
     var myTimer: Timer?
     var progressIncrement:Float = 0.0
+    var graphicCounter:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         //hide timer graphics
-        hideTimerGraphic()
+        initializeView()
         
     }
 
     @IBAction func PizzaSelectionButtonPressed(_ sender: UIButton) {
         
-        print(sender.tag)
-        progressBar.setProgress(0, animated: true)
-        progressIncrement = 0
-        progress = 0
-        finalImage.isHidden = true
-        //starting the graphic
-        startTimerGraphic()
+        // getting the button title
+        let buttonTitle = sender.currentTitle!
         
-        let buttonID = sender.tag
+        // reset view
+        initializeView()
         
         // update Label
-        updateInfoLabel(pizzaType: buttonID)
+        updateInfoLabel(pizzaType: buttonTitle)
         
-        var graphicCounter = 1
         
-        print("\(progressIncrement)")
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-            //progress bar
-            self.progressBar.setProgress(self.progress, animated: true)
-            
-            
-            //graphic
-            switch graphicCounter {
-            case 1:
-                self.tPizzaTimerGraphic.isHidden = false
-                self.rPizzaTimerGraphic.isHidden = true
-                self.bPizzaTimerGraphic.isHidden = true
-                self.lPizzaTimerGraphic.isHidden = true
-                graphicCounter = 2
-            case 2:
-                self.tPizzaTimerGraphic.isHidden = true
-                self.rPizzaTimerGraphic.isHidden = false
-                self.bPizzaTimerGraphic.isHidden = true
-                self.lPizzaTimerGraphic.isHidden = true
-                graphicCounter = 3
-            case 3:
-                self.tPizzaTimerGraphic.isHidden = true
-                self.rPizzaTimerGraphic.isHidden = true
-                self.bPizzaTimerGraphic.isHidden = false
-                self.lPizzaTimerGraphic.isHidden = true
-                graphicCounter = 4
-            case 4:
-                self.tPizzaTimerGraphic.isHidden = true
-                self.rPizzaTimerGraphic.isHidden = true
-                self.bPizzaTimerGraphic.isHidden = true
-                self.lPizzaTimerGraphic.isHidden = false
-                graphicCounter = 1
-            default:
-                print("jlt")
-            }
-            
-            if self.progress >= 1.0 {
-                timer.invalidate()
-                print("invalidate triggered")
-                self.hideTimerGraphic()
-                self.finalImage.isHidden = false
-            }
-            
-            print("\(self.progress) - progress")
-            self.progress += self.progressIncrement
-            
-        }
+        
+        
+        myTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(startTimer), userInfo: nil, repeats: true)
+
+        
+        
+//        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+//            //progress bar
+//
+//            if self.progress >= 1.0 {
+//                timer.invalidate()
+//                print("invalidate triggered")
+//
+//
+//            }
+//
+//            print("\(self.progress) - progress")
+//            self.progress += self.progressIncrement
+//
+//        }
         
         
     }
     
-    func hideTimerGraphic() {
+    // timer function
+    @objc func startTimer(timer: Timer) {
+        
+        //changing pizza graphic
+        changeTimerGraphic()
+        
+        // incrementing progress bar
+        changeProgressBar()
+        
+        // update timer label
+        updateTimerLabel()
+        
+        if progress >= 1.0 {
+            timer.invalidate()
+        }
+        
+    }
+    
+    func updateTimerLabel() {
+        timerLabel.text = "Completion - \(round(progress*100))%"
+    }
+    
+    func changeProgressBar() {
+        progress += progressIncrement
+        self.progressBar.setProgress(self.progress, animated: true)
+    }
+    
+    func initializeView() {
+        
+        // hide timer pizza graphic
         tPizzaTimerGraphic.isHidden = true
         rPizzaTimerGraphic.isHidden = true
         bPizzaTimerGraphic.isHidden = true
         lPizzaTimerGraphic.isHidden = true
-        finalImage.isHidden = true
+        
+        //progress bar reset to zero
+        progressBar.setProgress(0, animated: true)
+        //setting progress to 0
+        progress = 0
+        
+        // graphic counter reset
+        graphicCounter = 1
+        
+        // reset timer info label
+        timerLabel.text = ""
     }
     
-    func updateInfoLabel(pizzaType keyID: Int) {
-        switch keyID {
+    func updateInfoLabel(pizzaType keyID: String) {
+        infoLabel.text = "\(keyID) - \(pizzaDetails[keyID]!)"
+        
+        // set progress for progress bar as per the selected Pizza
+        progressIncrement = Float(1.0/Float(pizzaDetails[keyID]!))
+        print(progressIncrement)
+        
+    }
+    
+    func changeTimerGraphic( ) {
+        switch graphicCounter {
         case 1:
-            infoLabel.text = "Thin Crust Pizza - 10 min"
-            progressIncrement = 0.1
+            self.tPizzaTimerGraphic.isHidden = false
+            self.rPizzaTimerGraphic.isHidden = true
+            self.bPizzaTimerGraphic.isHidden = true
+            self.lPizzaTimerGraphic.isHidden = true
+            graphicCounter = 2
         case 2:
-            infoLabel.text = "Cheese Filled Pizza - 15 min"
-            progressIncrement = 0.075
+            self.rPizzaTimerGraphic.isHidden = false
+            graphicCounter = 3
         case 3:
-            infoLabel.text = "Pan Pizza - 20 min"
-            progressIncrement = 0.05
+            self.bPizzaTimerGraphic.isHidden = false
+            graphicCounter = 4
+        case 4:
+            self.lPizzaTimerGraphic.isHidden = false
+            graphicCounter = 1
         default:
-            print("wrong key pressed")
+            print("jlt")
         }
     }
     
-    func startTimerGraphic() {
-        
+    //resetting when touching outside
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        myTimer?.invalidate()
+        initializeView()
     }
     
 }
